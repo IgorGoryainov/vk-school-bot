@@ -1,11 +1,57 @@
-# BotForSchool
+# vk-school-bot
 
-Для проверки работы бота, достаточно изменить в bot.py строку с 'token'
+A VKontakte bot for a school class that answers homework and schedule questions without cluttering the class chat.
 
-Чтобы указать домашнее задание на любой день недели, нужно написать боту следующее сообщение:
+Built for class 11A at school №63, Samara. Students subscribe to daily homework/schedule broadcasts and can query them on demand.
 
-101 [номер дня недели] [само дз]. Понедельник - 1, вторник - 2 и т.д. . Пример: 101 1 Алгебра: 1034-1044
+## What it does
 
-## По всем вопросам пишите в [ВК](https://vk.com/igorgoryainov)
-![screenshot of sample](https://imyzik.ru/wp-content/uploads/2018/01/photo_2018-01-10_11-17-36.jpg)
+- Responds to commands like `5` (today's homework), `7` (today's schedule), `8` (tomorrow's schedule)
+- Lets subscribed students receive daily homework and schedule broadcasts
+- Lets teachers/admins post homework with `101 <day> <text>`
+- Resets homework storage each week automatically
 
+## Stack
+
+- Python 3.8+
+- [vk-api](https://github.com/python273/vk_api) for VKontakte API access
+
+## Setup
+
+```bash
+pip install -r requirements.txt
+```
+
+Create a `.env` file (see `.env.example`) and set your VK bot token:
+
+```
+VK_TOKEN=your_vk_token_here
+```
+
+Get a token from [vk.com/dev](https://vk.com/dev) — create a community, then issue a community API token with `messages` permissions.
+
+## Running
+
+```bash
+VK_TOKEN=your_token python src/bot.py
+```
+
+The bot polls unanswered conversations and responds to the first one each cycle.
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `help` | List all commands |
+| `1` / `2` | Subscribe / unsubscribe from homework broadcasts |
+| `3` / `4` | Subscribe / unsubscribe from schedule broadcasts |
+| `5` | Today's homework |
+| `6` | Tomorrow's homework |
+| `7` | Today's schedule |
+| `8` | Tomorrow's schedule |
+| `9` | Links to class textbooks |
+| `101 <day> <text>` | Save homework for a day (1=Mon, 6=Sat) |
+
+## Data
+
+Subscriber lists and homework entries are stored in the `data/` directory as plain text files. These files are not version-controlled — they are created at runtime. Back up the `data/` directory if you redeploy.
