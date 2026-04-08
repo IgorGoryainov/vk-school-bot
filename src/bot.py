@@ -185,7 +185,8 @@ def broadcast(vk, recipients, message):
 
 
 def handle_message(vk, user_id, text, subscribers, dz_subscribers, schedule_subscribers):
-    cmd = text.strip().lower()
+    stripped = text.strip()
+    cmd = stripped.lower()
     tokens = cmd.split()
 
     if cmd == 'sending000':
@@ -276,7 +277,9 @@ def handle_message(vk, user_id, text, subscribers, dz_subscribers, schedule_subs
     if len(tokens) >= 3 and tokens[0] == '101':
         try:
             day_number = int(tokens[1])
-            homework_text = ' '.join(tokens[2:])
+            # Preserve original case for homework text (only the prefix is parsed lowercase)
+            original_tokens = stripped.split(None, 2)
+            homework_text = original_tokens[2] if len(original_tokens) >= 3 else ' '.join(tokens[2:])
             hw_file = HOMEWORK_FILES.get(day_number)
             if hw_file:
                 write_homework(hw_file, current_week_number(), homework_text)
